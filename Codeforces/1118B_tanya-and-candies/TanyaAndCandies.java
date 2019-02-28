@@ -21,19 +21,15 @@ public class TanyaAndCandies {
       line = br.readLine();
       st = new StringTokenizer(line);
 
+      // Initialize candy weight array
       int[] candies = new int[N];
       for (int i = 0; i < N; i++) {
         candies[i] = Integer.parseInt(st.nextToken());
       }
 
-      // Create prefix arrays
+      // Initialize separate even/odd prefix arrays
       int[] even = new int[N+1];
       int[] odd = new int[N+1];
-      int[] total = new int[N+1];
-
-      even[0] = 0;
-      odd[0] = 0;
-      total[0] = 0;
 
       for (int i = 1; i <= N; i++) {
         if (i % 2 == 0) {
@@ -47,10 +43,9 @@ public class TanyaAndCandies {
         } else {
           odd[i] = odd[i-1];
         }
-
-        total[i] = total[i-1] + candies[i-1];
       }
 
+      // Test giving each candy to dad
       int result = 0;
       for (int i = 0; i < N; i++) {
         int evenSum = 0;
