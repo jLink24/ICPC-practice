@@ -14,37 +14,48 @@ public class Team {
 
     int n = in.nextInt();
 
-    int[] students = new int[n];
+    // Didn't use std array because of quicksort worst case
+    ArrayList<Integer> students = new ArrayList<>();
 
     for (int i = 0; i < n; i++) {
-      students[i] = in.nextInt();
+      students.add(in.nextInt());
     }
 
-    Arrays.sort(students);
+    Collections.sort(students);
 
+    // Find the max # students by binary searching for highest idx value <= 5
     int max = 1;
-    int count = 1;
-    int lowestTeammateIdx = 0;
-
-    for (int i = 1; i < students.length; i++) {
-      if (students[i] - students[lowestTeammateIdx] <= 5) {
-        count++;
-      } else {
-        if (count > max) {
-          max = count;
-        }
-        lowestTeammateIdx = i;
-        count = 1;
+    for (int i = 0; i < n; i++) {
+      int potentialMax = checkMax(i, students);
+      if (potentialMax > max) {
+        max = potentialMax;
       }
-    }
-
-    if (count > max) {
-      max = count;
     }
 
     out.println(max);
 
     out.flush();
+  }
+
+  private static int checkMax(int targetIdx, ArrayList<Integer> students) {
+    int maxIdx = targetIdx;
+    int lo = targetIdx + 1;
+    int hi = students.size() - 1;
+
+    while (lo <= hi) {
+      int mid = (lo + hi) / 2;
+
+      // Check upper half if current mid works
+      if (students.get(mid) - students.get(targetIdx) <= 5) {
+        maxIdx = mid;
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
+      }
+    }
+
+    // Return length of inclusive range from targetIdx to maxIdx
+    return maxIdx - targetIdx + 1;
   }
 
   public static class FastScanner {
